@@ -33,69 +33,71 @@ export function Header() {
   }, []);
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-500 ${
-        scrolled
-          ? "border-b border-rule-dark/60 bg-graphite/92 backdrop-blur-sm supports-[backdrop-filter]:bg-graphite/80"
-          : "border-b border-transparent bg-transparent"
-      }`}
-    >
-      <div className="mx-auto flex h-[var(--header-h)] w-full max-w-[112rem] items-center justify-between gap-6 px-5 sm:px-8 lg:px-12">
-        {/* Wordmark. TODO — replace with the real company name or a logo file. */}
-        <Link
-          href="/"
-          className="group flex items-baseline gap-2.5 text-onDark"
-          aria-label="Home"
-        >
-          <span className="type-expanded text-[1.0625rem] font-semibold uppercase leading-none tracking-[0.02em] sm:text-[1.1875rem]">
-            {TODO.companyName}
-          </span>
-          <span
-            aria-hidden="true"
-            className="hidden h-3 w-px bg-brass/70 sm:block"
-          />
-          <span className="annotation hidden text-brass/80 sm:block">Est. TODO</span>
-        </Link>
-
-        <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
-          {NAV.map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              className="annotation group relative py-2 text-onDark/75 transition-colors duration-300 hover:text-onDark"
-            >
-              {item.label}
-              <span className="absolute inset-x-0 -bottom-0.5 h-px origin-left scale-x-0 bg-brass transition-transform duration-300 group-hover:scale-x-100" />
-            </Link>
-          ))}
-        </nav>
-
-        <div className="flex items-center gap-3">
-          {PHONE && (
-            <a
-              href={`tel:${PHONE.replace(/[^0-9+]/g, "")}`}
-              className="annotation hidden text-onDark/75 transition-colors hover:text-onDark xl:block"
-            >
-              {PHONE}
-            </a>
-          )}
+    <>
+      <header
+        className={`fixed inset-x-0 top-0 z-40 transition-[background-color,border-color,backdrop-filter] duration-500 ${
+          scrolled
+            ? "border-b border-rule-dark/60 bg-graphite/92 backdrop-blur-sm supports-[backdrop-filter]:bg-graphite/80"
+            : "border-b border-transparent bg-transparent"
+        }`}
+      >
+        <div className="mx-auto flex h-[var(--header-h)] w-full max-w-[112rem] items-center justify-between gap-6 px-5 sm:px-8 lg:px-12">
+          {/* Wordmark. TODO — replace with the real company name or a logo file. */}
           <Link
-            href="#contact"
-            className="annotation hidden min-h-11 items-center border border-brass/60 px-5 text-brass transition-colors duration-300 hover:bg-brass hover:text-graphite sm:inline-flex"
+            href="/"
+            className="group flex items-baseline gap-2.5 text-onDark"
+            aria-label="Home"
           >
-            Get a Free Estimate
+            <span className="type-expanded text-[1.0625rem] font-semibold uppercase leading-none tracking-[0.02em] sm:text-[1.1875rem]">
+              {TODO.companyName}
+            </span>
+            <span
+              aria-hidden="true"
+              className="hidden h-3 w-px bg-brass/70 sm:block"
+            />
+            <span className="annotation hidden text-brass/80 sm:block">Est. TODO</span>
           </Link>
-          <button
-            type="button"
-            onClick={() => setOpen(true)}
-            aria-label="Open menu"
-            aria-expanded={open}
-            className="-mr-2 inline-flex h-12 w-12 items-center justify-center text-onDark lg:hidden"
-          >
-            <Menu size={22} strokeWidth={1.5} aria-hidden="true" />
-          </button>
+
+          <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
+            {NAV.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="annotation group relative py-2 text-onDark/75 transition-colors duration-300 hover:text-onDark"
+              >
+                {item.label}
+                <span className="absolute inset-x-0 -bottom-0.5 h-px origin-left scale-x-0 bg-brass transition-transform duration-300 group-hover:scale-x-100" />
+              </Link>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-3">
+            {PHONE && (
+              <a
+                href={`tel:${PHONE.replace(/[^0-9+]/g, "")}`}
+                className="annotation hidden text-onDark/75 transition-colors hover:text-onDark xl:block"
+              >
+                {PHONE}
+              </a>
+            )}
+            <Link
+              href="#contact"
+              className="annotation hidden min-h-11 items-center border border-brass/60 px-5 text-brass transition-colors duration-300 hover:bg-brass hover:text-graphite sm:inline-flex"
+            >
+              Get a Free Estimate
+            </Link>
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              aria-label="Open menu"
+              aria-expanded={open}
+              className="-mr-2 inline-flex h-12 w-12 items-center justify-center text-onDark lg:hidden"
+            >
+              <Menu size={22} strokeWidth={1.5} aria-hidden="true" />
+            </button>
+          </div>
         </div>
-      </div>
+      </header>
 
       {/* Mobile sheet */}
       <div
@@ -156,6 +158,6 @@ export function Header() {
           )}
         </nav>
       </div>
-    </header>
+    </>
   );
 }
