@@ -1,0 +1,248 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   JADE — design tokens
+   Palette is deliberately warm-neutral: gypsum board and plaster for the light
+   ground, a warm near-black (never a blue-black) for the dark plates, and a
+   desaturated bronze pushed toward olive-brown so it reads as aged metal
+   rather than a decorative gold.
+--------------------------------------------------------------------------- */
+@theme {
+  --color-gypsum: #eae6df;
+  --color-chalk: #f4f1ec;
+  --color-graphite: #191612;
+  --color-slate: #2a2620;
+  --color-bronze: #8f7343;
+  --color-brass: #c4a46a;
+
+  --color-ink: #191612;
+  --color-ink-2: #4a443b;
+  --color-ink-3: #6e6659;
+  --color-rule: #cfc9be;
+  --color-rule-dark: #3a342b;
+  --color-onDark: #e6e1d8;
+  --color-onDark-2: #a49c8d;
+
+  --font-display: var(--font-archivo), "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-sans: var(--font-archivo), "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-prose: var(--font-newsreader), "Newsreader", Georgia, "Times New Roman", serif;
+
+  --spacing-rail: 5.5rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Width axis
+   Archivo is a variable family with a real `wdth` axis. Exercising that axis
+   is the typographic idea of the site: monumental expanded headlines against
+   condensed annotation type, all from one family.
+--------------------------------------------------------------------------- */
+@utility type-expanded {
+  font-variation-settings: "wdth" 118;
+  letter-spacing: -0.022em;
+}
+@utility type-wide {
+  font-variation-settings: "wdth" 110;
+  letter-spacing: -0.012em;
+}
+@utility type-condensed {
+  font-variation-settings: "wdth" 74;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+@utility type-normal {
+  font-variation-settings: "wdth" 100;
+}
+
+/* Annotation type: the drawing-set label voice. Small, condensed, tabular. */
+@utility annotation {
+  font-family: var(--font-sans);
+  font-variation-settings: "wdth" 74;
+  font-weight: 500;
+  font-size: 0.6875rem;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Numerals used as plate / sheet indices. */
+@utility numeral {
+  font-family: var(--font-display);
+  font-variation-settings: "wdth" 112;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-weight: 400;
+}
+
+/* ---------------------------------------------------------------------------
+   Placeholder hatch
+   Drawing convention for "material to be specified". Used on every image slot
+   until real photography is supplied, so an empty slot reads as intentional
+   rather than broken.
+--------------------------------------------------------------------------- */
+@utility hatch {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    color-mix(in srgb, var(--color-ink) 6%, transparent) 0 1px,
+    transparent 1px 9px
+  );
+}
+@utility hatch-dark {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    color-mix(in srgb, #ffffff 7%, transparent) 0 1px,
+    transparent 1px 9px
+  );
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --header-h: 4.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --header-h: 5.5rem;
+    }
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-gypsum);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+
+  /* Nothing on this site is a rounded card. */
+  * {
+    border-radius: 0;
+  }
+
+  ::selection {
+    background: var(--color-bronze);
+    color: var(--color-chalk);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-bronze);
+    outline-offset: 3px;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+/* The one orchestrated moment on the page: the hero settling in on load. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.25rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes measure {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes plumb {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translateY(0.4rem);
+    opacity: 1;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   FAQ panel
+   Progressive enhancement: browsers that expose ::details-content animate the
+   panel open. Everywhere else the panel simply appears, which is the correct
+   fallback for a native disclosure widget.
+--------------------------------------------------------------------------- */
+@supports selector(::details-content) {
+  details.group::details-content {
+    block-size: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      block-size 380ms cubic-bezier(0.22, 1, 0.36, 1),
+      content-visibility 380ms allow-discrete,
+      opacity 260ms ease;
+  }
+
+  details.group[open]::details-content {
+    block-size: auto;
+    opacity: 1;
+  }
+}
+
+@supports (interpolate-size: allow-keywords) {
+  :root {
+    interpolate-size: allow-keywords;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Heading scale
+   Three steps, each sized to the column track it sits in, so a heading never
+   wraps somewhere the copy did not ask it to. The ceilings are derived from
+   the longest line each step actually has to carry at the narrowest track it
+   appears in — not picked by eye.
+
+   display — full content width  (Services, Process, About)
+   section — half width, ~5 of 10 columns  (Capabilities, Testimonials)
+   narrow  — ~4 of 10 columns  (Why Choose Us, Service Areas, FAQ)
+--------------------------------------------------------------------------- */
+@utility h-display {
+  font-size: clamp(2.25rem, 6vw, 5.25rem);
+  line-height: 0.94;
+}
+@utility h-section {
+  font-size: clamp(1.875rem, 4.4vw, 4rem);
+  line-height: 0.96;
+}
+@utility h-narrow {
+  font-size: clamp(1.75rem, 2.8vw, 2.75rem);
+  line-height: 0.98;
+}
