@@ -51,9 +51,7 @@ export function Capabilities() {
           className={`w-full ${p.ratio}`}
         />
         <figcaption className="mt-4 flex items-baseline gap-4 border-t border-rule pt-4">
-          <span className="annotation shrink-0 text-bronze">
-            {String(i + 1).padStart(2, "0")}
-          </span>
+
           <span>
             <span className="type-wide block text-[1.0625rem] font-medium leading-tight sm:text-lg">
               {item.title}
