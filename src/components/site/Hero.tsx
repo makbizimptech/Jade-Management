@@ -63,7 +63,14 @@ export function Hero() {
     };
 
     video.addEventListener("loadeddata", onLoaded);
-    return () => video.removeEventListener("loadeddata", onLoaded);
+    // iOS Safari may suspend loading entirely (e.g. in Low Power Mode), meaning
+    // loadeddata never fires. Fallback to reveal the poster image after a delay.
+    const fallbackId = setTimeout(() => setReady(true), 1500);
+
+    return () => {
+      video.removeEventListener("loadeddata", onLoaded);
+      clearTimeout(fallbackId);
+    };
   }, [srcAttached]);
 
   const poster = IMAGES.heroPoster;
@@ -81,8 +88,9 @@ export function Hero() {
           loop
           playsInline
           preload="metadata"
-          // Deliberately not `autoPlay`: the attribute starts playback as soon
-          // as data arrives, which overrides the reduced-motion decision below.
+          autoPlay
+          // autoPlay is required for iOS Safari to permit silent background playback.
+          // Reduced motion is handled by pausing it in the loadeddata handler.
           // Playback is started from the loadeddata handler instead.
           // TODO — supply /public/images/hero-poster.webp (see IMAGE-ASSETS.md).
           // Until it exists the graphite plate below covers the load, so no
