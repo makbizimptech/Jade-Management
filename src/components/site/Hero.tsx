@@ -20,26 +20,11 @@ import { PrimaryCta, SecondaryCta } from "@/components/ui/Primitives";
  */
 export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [srcAttached, setSrcAttached] = useState(false);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const attach = () => setSrcAttached(true);
-    const idle: typeof window.requestIdleCallback | undefined =
-      window.requestIdleCallback;
-
-    if (idle) {
-      const id = idle(attach, { timeout: 1200 });
-      return () => window.cancelIdleCallback(id);
-    }
-
-    const id = window.setTimeout(attach, 300);
-    return () => window.clearTimeout(id);
-  }, []);
-
-  useEffect(() => {
     const video = videoRef.current;
-    if (!video || !srcAttached) return;
+    if (!video) return;
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -71,7 +56,7 @@ export function Hero() {
       video.removeEventListener("loadeddata", onLoaded);
       clearTimeout(fallbackId);
     };
-  }, [srcAttached]);
+  }, []);
 
   const poster = IMAGES.heroPoster;
 
@@ -98,10 +83,7 @@ export function Hero() {
           poster={poster.available ? imageSrc(poster) : undefined}
           aria-hidden="true"
           tabIndex={-1}
-          // Set as an attribute rather than a <source> child: assigning src to
-          // a live media element re-runs the load algorithm, whereas appending
-          // a <source> to an element that already gave up does not.
-          src={srcAttached ? "/videos/hero-contractor.mp4" : undefined}
+          src="/videos/hero-contractor.mp4"
         />
       </div>
 
