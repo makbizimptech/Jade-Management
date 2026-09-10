@@ -26,34 +26,40 @@ export function Hero() {
     const video = videoRef.current;
     if (!video) return;
 
+    // Force iOS Safari to recognize the video as muted
+    video.defaultMuted = true;
+    video.muted = true;
+
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const onLoaded = () => {
       setReady(true);
       if (reduced) {
-        // Hold a representative frame rather than animating. pause() is
-        // explicit because a media element can begin playing the moment it
-        // has data, before this handler gets a chance to decide.
+        // Hold a representative frame rather than animating.
         video.pause();
         try {
           video.currentTime = Math.min(1, video.duration || 1);
-        } catch {
-          /* seeking unsupported — the first frame stands in */
-        }
+        } catch {}
         return;
       }
-      void video.play().catch(() => {
-        /* autoplay refused; the still frame remains, which is acceptable */
-      });
+      void video.play().catch(() => {});
     };
 
     video.addEventListener("loadeddata", onLoaded);
+    video.addEventListener("loadedmetadata", onLoaded);
+
+    // Force play immediately as well (catches cases where loadeddata doesn't fire)
+    if (!reduced) {
+      void video.play().catch(() => {});
+    }
+
     // iOS Safari may suspend loading entirely (e.g. in Low Power Mode), meaning
     // loadeddata never fires. Fallback to reveal the poster image after a delay.
     const fallbackId = setTimeout(() => setReady(true), 1500);
 
     return () => {
       video.removeEventListener("loadeddata", onLoaded);
+      video.removeEventListener("loadedmetadata", onLoaded);
       clearTimeout(fallbackId);
     };
   }, []);
