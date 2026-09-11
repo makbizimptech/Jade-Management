@@ -60,9 +60,8 @@ export function Hero() {
   const slides = [IMAGES.heroPoster, IMAGES.ctaBanner, IMAGES.aboutPrimary];
 
   useEffect(() => {
-    const isMobile = window.matchMedia("(max-width: 639px)").matches;
-    if (!isMobile) return;
-
+    // Run the slideshow interval continuously on all devices to prevent 
+    // breakpoint mismatch bugs (especially on phones requesting 'Desktop Site').
     const interval = setInterval(() => {
       setSlideIndex((current) => (current + 1) % slides.length);
     }, 4500);
@@ -73,8 +72,8 @@ export function Hero() {
     <section className="relative isolate min-h-[36rem] w-full overflow-hidden bg-graphite h-[100svh] lg:h-screen">
       {/* Media plane */}
       <div className="absolute inset-0 -z-10 bg-graphite">
-        {/* Mobile Slideshow (hidden on sm+) */}
-        <div className="absolute inset-0 sm:hidden">
+        {/* Mobile & Tablet Slideshow (hidden on true desktop screens) */}
+        <div className="absolute inset-0 lg:hidden">
           {slides.map((slide, i) => (
             <img
               key={slide.file}
@@ -88,10 +87,10 @@ export function Hero() {
           ))}
         </div>
 
-        {/* Desktop Video (hidden on mobile) */}
+        {/* Desktop Video */}
         <video
           ref={videoRef}
-          className="hidden sm:block absolute inset-0 h-full w-full object-cover sm:object-center"
+          className="hidden lg:block absolute inset-0 h-full w-full object-cover sm:object-center"
           muted
           loop
           playsInline
