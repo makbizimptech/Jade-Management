@@ -57,7 +57,7 @@ export function Hero() {
   }, []);
 
   const [slideIndex, setSlideIndex] = useState(0);
-  const slides = [IMAGES.heroPoster, IMAGES.ctaBanner, IMAGES.aboutPrimary];
+  const slides = [IMAGES.heroPoster, IMAGES.aboutPrimary, IMAGES.aboutDetail];
 
   useEffect(() => {
     // Run the slideshow interval continuously on all devices to prevent 
