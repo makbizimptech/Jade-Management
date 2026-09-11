@@ -56,23 +56,42 @@ export function Hero() {
     };
   }, []);
 
-  const poster = IMAGES.heroPoster;
+  const [slideIndex, setSlideIndex] = useState(0);
+  const slides = [IMAGES.heroPoster, IMAGES.ctaBanner, IMAGES.aboutPrimary];
+
+  useEffect(() => {
+    const isMobile = window.matchMedia("(max-width: 639px)").matches;
+    if (!isMobile) return;
+
+    const interval = setInterval(() => {
+      setSlideIndex((current) => (current + 1) % slides.length);
+    }, 4500);
+    return () => clearInterval(interval);
+  }, [slides.length]);
 
   return (
     <section className="relative isolate min-h-[36rem] w-full overflow-hidden bg-graphite h-[100svh] lg:h-screen">
       {/* Media plane */}
       <div className="absolute inset-0 -z-10 bg-graphite">
-        {poster.available && (
-          <img
-            src={imageSrc(poster)}
-            alt=""
-            className="absolute inset-0 h-full w-full object-cover object-[62%_center] sm:object-center"
-            aria-hidden="true"
-          />
-        )}
+        {/* Mobile Slideshow (hidden on sm+) */}
+        <div className="absolute inset-0 sm:hidden">
+          {slides.map((slide, i) => (
+            <img
+              key={slide.file}
+              src={imageSrc(slide)}
+              alt=""
+              className={`absolute inset-0 h-full w-full object-cover object-[62%_center] transition-opacity duration-1000 ${
+                i === slideIndex ? "opacity-100" : "opacity-0"
+              }`}
+              aria-hidden="true"
+            />
+          ))}
+        </div>
+
+        {/* Desktop Video (hidden on mobile) */}
         <video
           ref={videoRef}
-          className="absolute inset-0 h-full w-full object-cover object-[62%_center] sm:object-center"
+          className="hidden sm:block absolute inset-0 h-full w-full object-cover sm:object-center"
           muted
           loop
           playsInline
