@@ -20,8 +20,6 @@ import { PrimaryCta, SecondaryCta } from "@/components/ui/Primitives";
  */
 export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [ready, setReady] = useState(false);
-
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -33,7 +31,6 @@ export function Hero() {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const onLoaded = () => {
-      setReady(true);
       if (reduced) {
         // Hold a representative frame rather than animating.
         video.pause();
@@ -53,14 +50,9 @@ export function Hero() {
       void video.play().catch(() => {});
     }
 
-    // iOS Safari may suspend loading entirely (e.g. in Low Power Mode), meaning
-    // loadeddata never fires. Fallback to reveal the poster image after a delay.
-    const fallbackId = setTimeout(() => setReady(true), 1500);
-
     return () => {
       video.removeEventListener("loadeddata", onLoaded);
       video.removeEventListener("loadedmetadata", onLoaded);
-      clearTimeout(fallbackId);
     };
   }, []);
 
@@ -74,17 +66,13 @@ export function Hero() {
           <img
             src={imageSrc(poster)}
             alt=""
-            className={`absolute inset-0 h-full w-full object-cover object-[62%_center] sm:object-center transition-opacity duration-1000 ${
-              ready ? "opacity-100" : "opacity-0"
-            }`}
+            className="absolute inset-0 h-full w-full object-cover object-[62%_center] sm:object-center"
             aria-hidden="true"
           />
         )}
         <video
           ref={videoRef}
-          className={`absolute inset-0 h-full w-full object-cover object-[62%_center] sm:object-center transition-opacity duration-1000 ${
-            ready ? "opacity-100" : "opacity-0"
-          }`}
+          className="absolute inset-0 h-full w-full object-cover object-[62%_center] sm:object-center"
           muted
           loop
           playsInline
