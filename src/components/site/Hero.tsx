@@ -61,7 +61,7 @@ export function Hero() {
   return (
     <section className="relative isolate min-h-[36rem] w-full overflow-hidden bg-graphite h-[100svh] lg:h-screen">
       {/* Media plane */}
-      <div className="absolute inset-0 -z-10">
+      <div className="absolute inset-0 -z-10 bg-graphite">
         {poster.available && (
           <img
             src={imageSrc(poster)}
