@@ -78,7 +78,6 @@ export function Hero() {
           playsInline
           preload="auto"
           autoPlay
-          poster={poster.available ? imageSrc(poster) : undefined}
           aria-hidden="true"
           tabIndex={-1}
           src="/videos/hero-contractor.mp4"
