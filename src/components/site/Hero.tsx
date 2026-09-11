@@ -70,22 +70,26 @@ export function Hero() {
     <section className="relative isolate min-h-[36rem] w-full overflow-hidden bg-graphite h-[100svh] lg:h-screen">
       {/* Media plane */}
       <div className="absolute inset-0 -z-10">
+        {poster.available && (
+          <img
+            src={imageSrc(poster)}
+            alt=""
+            className={`absolute inset-0 h-full w-full object-cover object-[62%_center] sm:object-center transition-opacity duration-1000 ${
+              ready ? "opacity-100" : "opacity-0"
+            }`}
+            aria-hidden="true"
+          />
+        )}
         <video
           ref={videoRef}
-          className={`h-full w-full object-cover object-[62%_center] transition-opacity duration-1000 sm:object-center ${
+          className={`absolute inset-0 h-full w-full object-cover object-[62%_center] sm:object-center transition-opacity duration-1000 ${
             ready ? "opacity-100" : "opacity-0"
           }`}
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="auto"
           autoPlay
-          // autoPlay is required for iOS Safari to permit silent background playback.
-          // Reduced motion is handled by pausing it in the loadeddata handler.
-          // Playback is started from the loadeddata handler instead.
-          // TODO — supply /public/images/hero-poster.webp (see IMAGE-ASSETS.md).
-          // Until it exists the graphite plate below covers the load, so no
-          // broken-poster request is made.
           poster={poster.available ? imageSrc(poster) : undefined}
           aria-hidden="true"
           tabIndex={-1}
